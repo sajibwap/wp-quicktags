@@ -1,7 +1,7 @@
 <?php 
 
 /*
-Plugin Name: Quick Tags
+Plugin Name: Quick Tags and TinyMCE 
 Plugin URI: http://msajib.com
 Description: Quick tags plugin
 Version: 1.00
@@ -55,3 +55,37 @@ function my_quicktags() {
 }
 }
 add_action( 'admin_print_footer_scripts', 'my_quicktags' );
+
+
+/*
+** tinyMCE - Visual Text Editor
+** 
+**/
+
+Class tinyMC{
+
+	public function __construct(){
+		add_action('admin_init',array($this,'tiny_mc_assets'));
+	}
+
+	public function tiny_mc_assets(){
+		add_filter( 'mce_buttons', array($this,'mce_buttons_register_callback') );
+		add_filter( 'mce_external_plugins', array($this,'mce_external_plugins_callback') );
+	}
+
+	public function mce_buttons_register_callback($buttons){
+		$buttons[] = 'tmce_button_one';
+		$buttons[] = 'tmce_button_two';
+		$buttons[] = 'tmce_button_three';
+		$buttons[] = 'tmce_button_form';
+		return $buttons;
+	}
+
+	public function mce_external_plugins_callback($plugins){
+		$plugins['tmce_plugin'] = plugin_dir_url(__FILE__)."assets/js/tinymce.js";
+		return $plugins;
+	}
+
+}
+
+new tinyMC();
